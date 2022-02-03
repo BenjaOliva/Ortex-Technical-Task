@@ -7,7 +7,9 @@ import {
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
+import _ from 'lodash';
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { useState } from 'react/cjs/react.development';
 import { PriceCard } from './../extra/priceCard';
 
 const SocialButton = ({ children, label, href }) => {
@@ -35,25 +37,38 @@ const SocialButton = ({ children, label, href }) => {
   );
 };
 
+const socket = new WebSocket(
+  'ws://stream.tradingeconomics.com/?client=guest:guest'
+);
+const apiCall = { topic: 'subscribe', to: 'EURUSD:CUR' };
+
+socket.onopen = () => {
+  socket.send(JSON.stringify(apiCall));
+};
+
 export default function Footer() {
-  const socket = new WebSocket(
-    'ws://stream.tradingeconomics.com/?client=guest:guest'
-  );
-  const apiCall = { topic: 'subscribe', to: 'EURUSD:CUR' };
+  const [socketData, setSocketData] = useState();
 
-  socket.onopen = () => {
-    socket.send(JSON.stringify(apiCall));
-  };
+  socket.onmessage = _.throttle(
+    event => {
+      const json = JSON.parse(event.data);
 
-  socket.onmessage = function (event) {
-    const json = JSON.parse(event.data);
-    try {
-      if ((json.event = "data")) {
-        console.log("Data: ", event.data);
+      try {
+        if ((json.event = 'data')) {
+          console.log('Data: ', JSON.parse(event.data));
+          setSocketData(JSON.parse(event.data));
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
-    }
+    },
+    6000,
+    { leading: false }
+  );
+
+  const diffPercent = (a, b) => {
+    const numberPercent = 100 * Math.abs((a - b) / ((a + b) / 2));
+    return numberPercent.toPrecision(3);
   };
 
   return (
@@ -72,9 +87,9 @@ export default function Footer() {
       >
         <PriceCard
           data={{
-            label: 'Bitcoin (BTC)',
-            value: 5604.16,
-            change: 0.73,
+            label: socketData?.topic,
+            value: socketData?.price,
+            change: diffPercent(socketData?.price, socketData?.prev),
             currency: '$',
           }}
         />

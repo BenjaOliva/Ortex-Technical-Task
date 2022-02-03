@@ -15,7 +15,7 @@ export default function Home() {
   let navigate = useNavigate();
 
   return (
-    <Box marginX={10} h={"69vh"}>
+    <Box marginX={10} h={"73vh"} pb={50}>
       <Container maxW={'3xl'} centerContent>
         <Stack
           as={Box}
