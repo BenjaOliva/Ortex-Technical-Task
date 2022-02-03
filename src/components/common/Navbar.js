@@ -9,7 +9,6 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
-  DarkMode,
 } from '@chakra-ui/react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/ortex-logo.png';
@@ -55,7 +54,7 @@ export const Navbar = props => {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={8} alignItems={'center'}>
-            <Box bg={"gray.800"} rounded={10} paddingX={10}>
+            <Box bg={"gray.800"} rounded={10} paddingX={10} onClick={() => navigate("/")}>
               <Image w={'120px'} src={logo} />
             </Box>
           <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>

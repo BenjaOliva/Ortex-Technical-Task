@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
-import { useState } from 'react/cjs/react.development';
+import { useState } from 'react';
 import { PriceCard } from './../extra/priceCard';
 
 const SocialButton = ({ children, label, href }) => {
@@ -38,7 +38,7 @@ const SocialButton = ({ children, label, href }) => {
 };
 
 const socket = new WebSocket(
-  'ws://stream.tradingeconomics.com/?client=guest:guest'
+  'wss://stream.tradingeconomics.com/?client=guest:guest'
 );
 const apiCall = { topic: 'subscribe', to: 'EURUSD:CUR' };
 
