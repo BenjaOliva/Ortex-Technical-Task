@@ -1,40 +1,24 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Logo } from './Logo';
+import { ChakraProvider, Box, theme } from '@chakra-ui/react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navbar } from './components/common/Navbar';
+import { SignIn } from './components/login/Login';
+import Home from './components/Home';
+import Footer from './components/common/Footer';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
+      <Router>
+        <Box top="0" zIndex={'999'} position="sticky">
+          <Navbar />
+        </Box>
+        <Routes>
+          <Route path={'/login'} element={<SignIn />} />
+          <Route path={'/'} element={<Box pt={3}><Home /></Box>} />
+        </Routes>
+      </Router>
+      <Footer />
     </ChakraProvider>
   );
 }
